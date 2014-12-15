@@ -3,9 +3,9 @@ function [im, classLabels, segim, tileLabels, true_pos, total_pos, false_pos, to
  [truthTiles, ~] = partition(segim,tileSize);
  tileLabels = squeeze(sum(sum(truthTiles))/(tileSize.^2) > .9); 
  [~, ~, ~, ~, featureVecs] = APPtestImage(im,[],vertClassifier,horzClassifier,segDensity, tileSize);
- classLabels = predict(SVMStruct, featureVecs);
-%  s = size(featureVecs);
-%  classLabels = svmpredict(zeros(s(1),1),featureVecs, SVMStruct, '-q');
+ %classLabels = predict(SVMStruct, featureVecs);
+  s = size(featureVecs);
+  classLabels = svmpredict(zeros(s(1),1),featureVecs(:,abs(beta) > .1), SVMStruct, '-q');
 %  sizes = size(classLabels);
 %  shiftup = circshift(classLabels,[1,0]);
 %  shiftdown = circshift(classLabels,[-1,0]);

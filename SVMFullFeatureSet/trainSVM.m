@@ -1,13 +1,43 @@
+% 'training...'
+% C = [2.9,2.95,3,3.05,3.1];
+% numSVMs = length(C);
+% FEATURES = features(1:numFeatureVecs,:);
+% LABELS = truthLabels(1:numFeatureVecs);
+% BETA = ones(82,1);
+% parfor i = 1:numSVMs
+%     LSVMrbf(i) = svmtrain(LABELS, FEATURES,sprintf('-s 0 -c %d -t 2 -g 1/82',C(i)));
+% end
+% 'training... done!'
+
+'evaluating...'
+evaluateSVM;
+'evaluating... done!'
+
+save EVALUATINGCS
+
+linSVM = fitcsvm(features(1:numFeatureVecs,:), truthLabels(1:numFeatureVecs),'Standardize',true);
+
 'training...'
-C = [1,2,3,3.5,4,4.5,500,1000];
+C = [2.9,2.95,3,3.05,3.1];
 numSVMs = length(C);
-FEATURES = features(1:numFeatureVecs,:);
+BETA = linSVM.Beta;
+FEATURES = features(1:numFeatureVecs,abs(linSVM.Beta) > .1);
 LABELS = truthLabels(1:numFeatureVecs);
 
 parfor i = 1:numSVMs
     LSVMrbf(i) = svmtrain(LABELS, FEATURES,sprintf('-s 0 -c %d -t 2 -g 1/82',C(i)));
 end
 'training... done!'
+
+'evaluating...'
+evaluateSVM;
+'evaluating... done!'
+
+save EVALUATINGREDUCEDFEATURESET
+
+
+
+
 
 % SVMStruct = fitcsvm(features(1:numFeatureVecs,:), truthLabels(1:numFeatureVecs),'KernelFunction','polynomial','Standardize',true);
 % '1...'
