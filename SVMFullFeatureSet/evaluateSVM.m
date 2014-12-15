@@ -8,14 +8,15 @@ for i = 1:sizes(1)
 end
 
 tileSizes = 30;
-sens = zeros(1,length(tileSizes));
-fpr = zeros(1,length(tileSizes));
-acc = zeros(1,length(tileSizes));
+sens = zeros(1,length(LSVMrbf));
+fpr = zeros(1,length(LSVMrbf));
+acc = zeros(1,length(LSVMrbf));
 j = 1;
 dims = zeros(length(tileSizes),20);
 
 for SVM = LSVMrbf
 
+j
 start = cputime;
 true_pos = zeros(1,length(test_inds));
 total_pos = zeros(1,length(test_inds));
@@ -23,7 +24,7 @@ false_pos = zeros(1,length(test_inds));
 total_neg = zeros(1,length(test_inds));
 
 parfor i = 1:length(test_inds)
-    [~, ~, ~, ~, true_pos(i), total_pos(i), false_pos(i), total_neg(i)] = classifySingleImage(imsegs(test_inds(i)), SVM, classifiers.vert_classifier,classifiers.horz_classifier,segment_density, tileSize, linSVM.Beta);
+    [~, ~, ~, ~, true_pos(i), total_pos(i), false_pos(i), total_neg(i)] = classifySingleImage(imsegs(test_inds(i)), SVM, classifiers.vert_classifier,classifiers.horz_classifier,segment_density, tileSize, BETA);
 end
 
 
