@@ -7,9 +7,7 @@ for i = 1:101
     im = imread(['../bandhdataset/',test_set(i).name]);
     im = imfilter(im,lowpass);
     im = im(1:4:end,1:4:end,:);
-    imagesc(im);
-    h = imfreehand;
-    mask = h.createMask();
+    mask = roipoly(im);
     imnum = imnum + 1;
     image_data(imnum).name = test_set(i).name;
     image_data(imnum).image = im;
