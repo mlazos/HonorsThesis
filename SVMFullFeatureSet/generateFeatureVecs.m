@@ -1,4 +1,4 @@
-load 'bandhdata.mat'
+%load 'bandhdata.mat'
 
 %create classifiers struct
 load('../GeometricContext/data/ijcvClassifier.mat');
@@ -35,4 +35,8 @@ for i = 1:length(training_inds)
     truthLabels((numFeatureVecs+1):(numFeatureVecs+sizes(1)),:) = tileLabels;
     numFeatureVecs = numFeatureVecs + sizes(1);
 end
+FEATURES = features(1:numFeatureVecs,:);
+LABELS = truthLabels(1:numFeatureVecs);
+clearvars -except FEATURES LABELS training_inds image_data numFeatureVecs
+BETA = ones(1,82);
 'calculating features... done!'

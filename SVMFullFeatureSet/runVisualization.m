@@ -1,6 +1,6 @@
-for i = test_inds(10:20)
+for i = test_inds(50:59)
     imseg = image_data(i);
-    [im, labels, segim, truth, numCorrect, total] = classifySingleImage(imseg, SVMStruct, classifiers.vert_classifier,classifiers.horz_classifier,segment_density, tileSize, ones(1,82));
+    [im, labels, segim, truth, numCorrect, total] = classifySingleImage(imseg, LSVMrbf, classifiers.vert_classifier,classifiers.horz_classifier,segment_density, tileSize, BETA);
     learned = visualizeClassification(im,labels,tileSize);
     correct = visualizeClassification(im,truth, tileSize);
     figure;
@@ -11,4 +11,6 @@ for i = test_inds(10:20)
     imagesc(correct);
     title([imseg.name, ' truth']);
 end
+
+clear imseg learned correct im labels segim truth numCorrect total i
 
