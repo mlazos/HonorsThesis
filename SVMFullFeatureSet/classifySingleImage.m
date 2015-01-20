@@ -4,7 +4,7 @@ function [im, classLabels, segim, tileLabels, true_pos, total_pos, false_pos, to
  tileLabels = squeeze(sum(sum(truthTiles))/(tileSize.^2) > .9); 
  [~, ~, ~, ~, featureVecs] = APPtestImage(im,[],vertClassifier,horzClassifier,segDensity, tileSize);
  s = size(featureVecs);
- classLabels = svmpredict(zeros(s(1),1),featureVecs, SVMStruct, '-q');
+ classLabels = svmpredict(zeros(s(1),1),featureVecs(:,logical(beta)), SVMStruct, '-q');
  true_pos = sum(classLabels & tileLabels);
  total_pos = sum(tileLabels);
  false_pos = sum(classLabels & ~tileLabels);

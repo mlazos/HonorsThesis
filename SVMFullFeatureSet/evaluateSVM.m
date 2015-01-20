@@ -19,7 +19,6 @@ sens = zeros(1,length(LSVMrbf));
 fpr = zeros(1,length(LSVMrbf));
 acc = zeros(1,length(LSVMrbf));
 j = 1;
-dims = zeros(length(tileSizes),20);
 
 
 
@@ -45,7 +44,7 @@ acc(j) = (sum(true_pos) + (sum(total_neg) - sum(false_pos)))/(sum(total_pos) + s
 j = j + 1;
 end
 
-clearvars -except FEATURES LABELS BETA LSVMrbf classifiers training_inds test_inds image_data numFeatureVecs sens fpr acc segment_density
+clearvars -except FEATURES NOLOCS LABELS BETA LSVMrbf classifiers training_inds test_inds image_data numFeatureVecs sens fpr acc segment_density
 
 sens
 fpr
