@@ -1,4 +1,4 @@
-function [doog_filters, texton_data] = APPgetImageFilters;
+function [doog_filters, texton_data] = APPgetImageFilters
 % Gets filters for creating texture features
 
 % create pair data
