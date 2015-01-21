@@ -1,9 +1,10 @@
 tileSize = 30;
-for i = test_inds(50:59)
+for i = test_inds(1:59)
     imseg = image_data(i);
-    [im, labels, segim, truth, numCorrect, total] = classifySingleImage(imseg, LSVMrbf, classifiers.vert_classifier,classifiers.horz_classifier,segment_density, tileSize, BETA);
-    learned = visualizeClassification(im,labels,tileSize);
-    correct = visualizeClassification(im,truth, tileSize);
+    [labels, ~, ~, ~, ~] = classifySingleImage(imseg, LSVMrbf,  BETA);
+    [im, ~] = processImageData(imseg, tileSize);
+    learned = visualizeClassification(im, labels, tileSize);
+    correct = visualizeClassification(im, imseg.feature_labels, tileSize);
     figure;
     subplot(1,2,1);
     imagesc(learned);

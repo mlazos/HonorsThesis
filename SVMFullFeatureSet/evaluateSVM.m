@@ -33,7 +33,7 @@ false_pos = zeros(1,length(test_inds));
 total_neg = zeros(1,length(test_inds));
 
 parfor i = 1:length(test_inds)
-    [~, ~, ~, ~, true_pos(i), total_pos(i), false_pos(i), total_neg(i)] = classifySingleImage(image_data(test_inds(i)), SVM, classifiers.vert_classifier,classifiers.horz_classifier,segment_density, tileSize, BETA);
+    [~, true_pos(i), total_pos(i), false_pos(i), total_neg(i)] = classifySingleImage(image_data(test_inds(i)), SVM, BETA);
 end
 
 

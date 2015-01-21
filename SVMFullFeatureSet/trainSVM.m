@@ -4,6 +4,7 @@ numSVMs = length(C);
 parfor i = 1:numSVMs
     LSVMrbf(i) = svmtrain(LABELS, FEATURES(:,logical(BETA)),sprintf('-s 0 -c %d -t 2 -g 1/82',C(i)));
 end
+clear numSVMs C
 'training... done!'
 
 

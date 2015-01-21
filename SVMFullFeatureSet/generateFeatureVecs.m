@@ -22,21 +22,20 @@ numFeatureVecs = 0;
 
 sizes = size(image_data);
 training_inds = 1:2:sizes(1);
-
 'calculating features...'
-for i = 1:length(training_inds)
+parfor i = 1:length(image_data)
     [im,segim] = processImageData(image_data(i),tileSize);
     s = size(im);
     [~, ~, maps, ~, featureVecs] = APPtestImage(im,[],classifiers.vert_classifier,classifiers.horz_classifier,segment_density, tileSize);
     sizes = size(featureVecs);
-    features((numFeatureVecs+1):(numFeatureVecs+sizes(1)),:) = featureVecs;
     [truthTiles, xydim] = partition(segim,tileSize);
     tileLabels = sum(sum(truthTiles))/(tileSize^2) > .9;
-    truthLabels((numFeatureVecs+1):(numFeatureVecs+sizes(1)),:) = tileLabels;
-    numFeatureVecs = numFeatureVecs + sizes(1);
+    image_data(i).features = featureVecs;
+    image_data(i).feature_labels = tileLabels;
+    image_data(i).tile_size = tileSize;
 end
-FEATURES = features(1:numFeatureVecs,:);
-LABELS = truthLabels(1:numFeatureVecs);
+
+%FEATURES = features(1:numFeatureVecs,:);
+%LABELS = truthLabels(1:numFeatureVecs);
 clearvars -except FEATURES LABELS training_inds image_data numFeatureVecs
-BETA = ones(1,82);
 'calculating features... done!'
