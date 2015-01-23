@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <climits>
 #include "pnmfile.h"
-#include "filter.h"
+#include "hsv_conversion.h"
 
 using namespace vlib;
 
@@ -11,8 +11,23 @@ using namespace vlib;
 
 
 namespace hsv {
+    image<hsv_float> *rgb_to_hsv_im(image<rgb> *input_im) { 
+    
+    int width = input_im->width();
+    int height = input_im->height();
 
-    hsv_float rgbToHsv(const rgb value ){
+    image<hsv_float> *hsv_im = new image<hsv_float>(width, height);
+    for(int row = 0; row < height; row++) {
+      for(int col = 0; col < width; col++) {
+        imRef(hsv_im, col, row) = rgb_to_hsv(imRef(input_im, col, row));
+      }  
+    }
+
+    return hsv_im;
+    
+    }
+
+    hsv_float rgb_to_hsv(const rgb value ){
       double r = value.r/255;
       double g = value.g/255;
       double b = value.b/255;
