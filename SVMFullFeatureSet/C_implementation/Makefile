@@ -1,6 +1,6 @@
 INCDIR   = -I./include -I./vlib1.0/include
 DBG      = -g
-OPT      = -O3
+OPT      = #-O3
 CXX      = g++
 CXXFLAGS = $(DBG) $(OPT) $(INCDIR)
 LDFLAGS  = $(DBG) $(OPT) -lm 

@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 
   // load input
   image<rgb> *input = loadPPM(input_name); 
-  image<hsv_float> *hsv_im = rgb_to_hsv_im(input );
+  image<hsv_float> *hsv_im = rgb_to_hsv_im(input);
 
 
 

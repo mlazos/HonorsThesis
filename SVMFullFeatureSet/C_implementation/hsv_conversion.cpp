@@ -12,7 +12,7 @@ using namespace vlib;
 
 namespace hsv {
     image<hsv_float> *rgb_to_hsv_im(image<rgb> *input_im) { 
-    
+
     int width = input_im->width();
     int height = input_im->height();
 
@@ -28,25 +28,26 @@ namespace hsv {
     }
 
     hsv_float rgb_to_hsv(const rgb value ){
-      double r = value.r/255;
-      double g = value.g/255;
-      double b = value.b/255;
-      double max = MAX(MAX(r,g),b);
-      double min = MIN(MIN(r,g),b);
-      double h, s, v;
+      float r = float(value.r)/255.0;
+      float g = float(value.g)/255.0;
+      float b = float(value.b)/255.0;
+
+      float max = MAX(MAX(r,g),b);
+      float min = MIN(MIN(r,g),b);
+      float h, s, v;
       v = max;
 
-      double d = max - min;
+      float d = max - min;
       s = max == 0 ? 0 : (d / max);
 
       if(max == min){
           h = 0; // achromatic
       }else{
-          if(max ==  value.r) {
+          if(max == r) {
             h = (g - b) / d + (g < b ? 6 : 0);
-          } else if(max == value.g) {
+          } else if(max == g) {
             h = (b - r) / d + 2;
-          } else if(max == value.b) {
+          } else if(max == b) {
             h = (r - g) / d + 4;
           }
         h = h/6;
@@ -55,7 +56,7 @@ namespace hsv {
       hsv_float ret_val;
       ret_val.h = h;
       ret_val.s = s;
-      ret_val.v = v;   
+      ret_val.v = v;
       return ret_val;
     }   
 
