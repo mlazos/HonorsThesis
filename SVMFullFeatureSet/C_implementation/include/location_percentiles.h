@@ -17,19 +17,10 @@ int main(int argc, char **argv) {
   double sigma = atof(argv[3]);
 
   // load input
-  image<uchar> *input = loadPPM(input_name);
+  image<rgb> *input = loadPPM(input_name);
 
   // convolve image with gaussian
-  image<float> *smoothed = smooth(input, sigma);
-
-  // convert to gray
-  image<uchar> *output = imageFLOATtoUCHAR(smoothed, 0, UCHAR_MAX);
-
-  // save output
-  savePPM(output, output_name);
-
   delete input;
-  delete output;
 }
 
 }

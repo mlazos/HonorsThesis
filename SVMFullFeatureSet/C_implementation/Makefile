@@ -1,30 +1,18 @@
-INCDIR = -I./include -I./vlib1.0/include
-DBG    = -g
-OPT    = -O3
-CPP    = g++
-CFLAGS = $(DBG) $(OPT) $(INCDIR)
-LINK   = -lm 
-FEATURES = hsv_means hsv_histograms edge_histogram location_percentiles
+INCDIR   = -I./include -I./vlib1.0/include
+DBG      = -g
+OPT      = -O3
+CXX      = g++
+CXXFLAGS = $(DBG) $(OPT) $(INCDIR)
+LDFLAGS  = $(DBG) $(OPT) -lm 
+OBJS = classify_image.o hsv_conversion.o#$(wildcard *.cpp)
+
 
 all: classify_image
 
-classify_image: classify_image.cpp hsv_conversion $(FEATURES)
-	$(CPP) $(CFLAGS) -o classify_image classify_image.cpp $(LINK)
+%: %.o
+	$(CXX) $(LDFLAGS) -o $@ $^
 
-hsv_conversion: hsv_conversion.cpp
-	$(CPP) $(CFLAGS) -o hsv_conversion hsv_conversion.cpp $(LINK)
-
-hsv_means: hsv_means.cpp 
-	$(CPP) $(CFLAGS) -o hsv_means hsv_means.cpp $(LINK)
-
-hsv_histograms: hsv_histograms.cpp 
-	$(CPP) $(CFLAGS) -o hsv_histograms hsv_histograms.cpp $(LINK)
-
-edge_histogram: edge_histogram.cpp
-	$(CPP) $(CFLAGS) -o edge_histogram edge_histogram.cpp $(LINK)
-
-location_percentiles: location_percentiles.cpp 
-	$(CPP) $(CFLAGS) -o location_percentiles location_percentiles.cpp $(LINK)
+classify_image: $(OBJS)
 
 clean:
 	/bin/rm -f classify_image features hsv_means hsv_histograms edge_histogram location_percentiles *.o

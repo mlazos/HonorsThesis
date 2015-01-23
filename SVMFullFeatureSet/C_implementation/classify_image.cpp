@@ -2,9 +2,10 @@
 #include <cstdlib>
 #include <climits>
 #include "pnmfile.h"
-#include "filter.h"
+#include "hsv_conversion.h"
 
 using namespace vlib;
+using namespace hsv;
 
 int main(int argc, char **argv) {
   if (argc != 4) {
@@ -18,7 +19,7 @@ int main(int argc, char **argv) {
 
   // load input
   image<rgb> *input = loadPPM(input_name); 
-  image<hsv> *input_hsv = rgb2hsv(input);
+  image<hsv_float> *hsv_im = rgb_to_hsv_im(input );
 
 
 
