@@ -1,7 +1,3 @@
-#include <cstdio>
-#include <cstdlib>
-#include <climits>
-#include "misc.h"
 #include "hsv_means.h"
 
 using namespace vlib;

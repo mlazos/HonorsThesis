@@ -1,7 +1,3 @@
-#include <cstdio>
-#include <cstdlib>
-#include <climits>
-#include "pnmfile.h"
 #include "hsv_conversion.h"
 
 using namespace vlib;

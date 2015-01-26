@@ -5,8 +5,11 @@
 #include "image.h"
 using namespace vlib;
 
+#ifndef HSV_MEANS_H
+#define HSV_MEANS_H
 namespace features {
 
 int hsv_means(image<hsv_float>*, int, int, int, int, float*);
 
 }
+#endif
