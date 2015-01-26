@@ -54,6 +54,13 @@ namespace vlib {
     return result;
   }
 
+  static inline hsv_float operator+(const hsv_float &u, const hsv_float &v) {
+    hsv_float result = { u.h + v.h, u.s + v.s, u.v + v.v };
+    return result;
+  }
+
+
+
   static inline rgb_float operator-(const rgb_float &u, const rgb_float &v) {
     rgb_float result = { u.r - v.r, u.g - v.g, u.b - v.b };
     return result;

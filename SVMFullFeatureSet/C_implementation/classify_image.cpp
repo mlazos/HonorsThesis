@@ -3,10 +3,10 @@
 #include <climits>
 #include "pnmfile.h"
 #include "hsv_conversion.h"
-
+#include "hsv_means.h"
 using namespace vlib;
 using namespace hsv;
-
+using namespace features;
 int main(int argc, char **argv) {
   if (argc != 4) {
     fprintf(stderr, "usage: %s input(ppm) output(ppm) sigma\n", argv[0]);
@@ -21,8 +21,25 @@ int main(int argc, char **argv) {
   image<rgb> *input = loadPPM(input_name); 
   image<hsv_float> *hsv_im = rgb_to_hsv_im(input);
 
+  const int tile_size = 30;
+  int width = hsv_im->width();
+  int height = hsv_im->height();
+  
+  int num_tiles = (width/tile_size) * (height/tile_size);
+  const int num_features = 21;
+  float feature_vecs[num_tiles][21];
+  float test[3];
 
 
-  // convolve image with gaussian
+  //calcualte features over all tiles
+  for(int row = 0; row + tile_size < height; row += tile_size) {
+    for(int col = 0; col + tile_size < width; col += tile_size) {
+      hsv_means(hsv_im, col, col + tile_size, row, row + tile_size, test);
+      printf("%d, %f, %f, %f \n",col, test[0],test[1],test[2]);
+    }
+  }
+
+
+
   delete input;
 }

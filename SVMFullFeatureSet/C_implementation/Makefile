@@ -4,18 +4,18 @@ OPT      = #-O3
 CXX      = g++
 CXXFLAGS = $(DBG) $(OPT) $(INCDIR)
 LDFLAGS  = $(DBG) $(OPT) -lm 
-OBJS = classify_image.o hsv_conversion.o#$(wildcard *.cpp)
+OBJS =  hsv_conversion.o hsv_means.o#$(wildcard *.cpp)
 
 
 all: classify_image
 
-%: %.o
-	$(CXX) $(LDFLAGS) -o $@ $^
-
 classify_image: $(OBJS)
 
+%.o : %.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
 clean:
-	/bin/rm -f classify_image features hsv_means hsv_histograms edge_histogram location_percentiles *.o
+	/bin/rm -f classify_image *.o
 
 clean-all: clean
 	/bin/rm -f *~ *.p?m 
