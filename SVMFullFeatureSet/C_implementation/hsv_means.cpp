@@ -1,25 +1,43 @@
 #include <cstdio>
 #include <cstdlib>
 #include <climits>
-#include "pnmfile.h"
-#include "filter.h"
+#include "misc.h"
+#include "hsv_means.h"
 
 using namespace vlib;
 
-int main(int argc, char **argv) {
-  if (argc != 4) {
-    fprintf(stderr, "usage: %s input(ppm) output(ppm) sigma\n", argv[0]);
-    return 1;
+namespace features {
+
+
+/*Calculates the mean hsv values in the square defined by (col_start, col_end), (row_start, row_end)*/
+int hsv_means(image<hsv_float>* image, int col_start, int col_end, int row_start, int row_end, float* result) {
+
+  hsv_float avg;
+  avg.h = 0;
+  avg.s = 0;
+  avg.v = 0;
+  int rows = row_end - row_start;
+  int cols = col_end - col_start;
+  int total = rows * cols;
+
+  for(int row = row_start; row < row_end; row++) {
+    for(int col = col_start; col < col_end; col++) {
+       avg = avg + imRef(image, col, row);  
+    }
   }
 
-  char *input_name = argv[1];
-  char *output_name = argv[2];
-  double sigma = atof(argv[3]);
 
-  // load input
-  image<rgb> *input = loadPPM(input_name);
+  avg.h = avg.h/total;
+  avg.s = avg.s/total;
+  avg.v = avg.v/total;
 
+  result[0] = avg.h;
+  result[1] = avg.s;
+  result[2] = avg.v;
 
-
+  return 0;
+}
 
 }
+
+
