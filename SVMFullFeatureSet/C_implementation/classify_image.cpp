@@ -4,6 +4,7 @@
 #include "pnmfile.h"
 #include "hsv_conversion.h"
 #include "hsv_means.h"
+#include "hsv_histograms.h"
 using namespace vlib;
 using namespace hsv;
 using namespace features;
@@ -26,16 +27,16 @@ int main(int argc, char **argv) {
   int height = hsv_im->height();
   
   int num_tiles = (width/tile_size) * (height/tile_size);
-  const int num_features = 21;
-  float feature_vecs[num_tiles][21];
-  float test[3];
+  float test[6];
 
 
   //calcualte features over all tiles
   for(int row = 0; row + tile_size < height; row += tile_size) {
     for(int col = 0; col + tile_size < width; col += tile_size) {
-      hsv_means(hsv_im, col, col + tile_size, row, row + tile_size, test);
-      printf("%d, %f, %f, %f \n",col, test[0],test[1],test[2]);
+      //hsv_means(hsv_im, col, col + tile_size, row, row + tile_size, test);
+      //hue_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 5, test); 
+      //sat_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 3, test); 
+      printf("%d, %f, %f, %f, %f, %f, %f \n",col, test[0],test[1],test[2], test[3], test[4], test[5]);
     }
   }
 

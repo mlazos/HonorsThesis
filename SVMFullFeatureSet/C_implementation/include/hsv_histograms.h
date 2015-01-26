@@ -1,35 +1,17 @@
 #include <cstdio>
 #include <cstdlib>
 #include <climits>
+#include <math.h>
 #include "pnmfile.h"
-#include "filter.h"
+#include "misc.h"
+#include "image.h"
 
+using namespace vlib;
+
+#ifndef HSV_HIST_H
+#define HSV_HIST_H
 namespace features {
-
-int main(int argc, char **argv) {
-  if (argc != 4) {
-    fprintf(stderr, "usage: %s input(ppm) output(ppm) sigma\n", argv[0]);
-    return 1;
-  }
-
-  char *input_name = argv[1];
-  char *output_name = argv[2];
-  double sigma = atof(argv[3]);
-
-  // load input
-  image<uchar> *input = loadPPM(input_name);
-
-  // convolve image with gaussian
-  image<float> *smoothed = smooth(input, sigma);
-
-  // convert to gray
-  image<uchar> *output = imageFLOATtoUCHAR(smoothed, 0, UCHAR_MAX);
-
-  // save output
-  savePPM(output, output_name);
-
-  delete input;
-  delete output;
+int hue_histogram_features(image<hsv_float>*, int, int, int, int, float, float, int, float*);
+int sat_histogram_features(image<hsv_float>*, int, int, int, int, float, float, int, float*); 
 }
-
-}
+#endif
