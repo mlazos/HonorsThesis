@@ -3,9 +3,9 @@
 
 namespace features {
 
-int location_features(int row_start, int row_end, float* center) {
+int location_features(int row_start, int row_end, int height, float* center) {
   
-  *center = (row_start + row_end)/2;
+  *center = ((float)row_start/height + (float)row_end/height)/2;
 
   return 0;
 }

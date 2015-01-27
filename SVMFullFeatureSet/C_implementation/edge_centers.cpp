@@ -29,12 +29,12 @@ int edge_centers(image<uchar>* image, int col_start, int col_end, int row_start,
     }
   }
   
-  printf("%d %f %f\n", numP, sumx, sumy);
   //find centers of edge mass for x,y
   float centerx = sumedgex/sumx;
   float centery = sumedgey/sumy;
 
-  printf("centers: %f %f", centerx, centery);
+  //printf("%f\n", centerx);
+  //printf("%f\n", centery);
 
   sumedgex = 0;
   sumedgey = 0;
@@ -42,19 +42,27 @@ int edge_centers(image<uchar>* image, int col_start, int col_end, int row_start,
   //find center of mass of region within edge centers;
   for(int row = row_start; row < row_end; row++) {
     for(int col = col_start; col < col_end; col++) {
-      if(col < centerx) {
+      if(col/width < centerx) {
         sumedgex = sumedgex + col/width;
       }
-      if(row < centery) {
+      if(row/height < centery) {
         sumedgey = sumedgey + row/height;
       }
     }
   }
 
+  //printf("%f\n", sumedgex);
+  //printf("%f\n", sumedgey); 
+
   //edge center x
   edge_centers[0] = sumedgex/sumx;
   //edge center y
   edge_centers[1] = sumedgey/sumy;
+
+  //printf("%f\n", edge_centers[0]);
+ 
+  //printf("%f\n", edge_centers[1]);
+
 
 
   return 0;
