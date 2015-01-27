@@ -5,6 +5,12 @@
 #include "hsv_conversion.h"
 #include "hsv_means.h"
 #include "hsv_histograms.h"
+#include "location.h"
+#include "imconv.h"
+#include "filter.h"
+#include "canny.h"
+#include "edge_centers.h"
+
 using namespace vlib;
 using namespace hsv;
 using namespace features;
@@ -21,7 +27,10 @@ int main(int argc, char **argv) {
   // load input
   image<rgb> *input = loadPPM(input_name); 
   image<hsv_float> *hsv_im = rgb_to_hsv_im(input);
-
+  image<uchar> *gray = imageRGBtoGRAY(input);
+  image<float> *smoothed = smooth(gray, 1.0);
+  image<uchar> *edgeim = canny(smoothed, 1.0);
+   
   const int tile_size = 30;
   int width = hsv_im->width();
   int height = hsv_im->height();
@@ -36,11 +45,17 @@ int main(int argc, char **argv) {
       //hsv_means(hsv_im, col, col + tile_size, row, row + tile_size, test);
       //hue_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 5, test); 
       //sat_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 3, test); 
-      printf("%d, %f, %f, %f, %f, %f, %f \n",col, test[0],test[1],test[2], test[3], test[4], test[5]);
+      //location_features(row, row + tile_size, test);
+      edge_centers(edgeim, col, col + tile_size, row, row + tile_size, test);          
+      printf("%f, %f\n", test[0], test[1]); 
+      //printf("%f\n",*test/height);
+      //printf("%d, %f, %f, %f, %f, %f, %f \n",col, test[0],test[1],test[2], test[3], test[4], test[5]);
     }
   }
 
 
 
   delete input;
+  delete smoothed;
+  delete gray;
 }

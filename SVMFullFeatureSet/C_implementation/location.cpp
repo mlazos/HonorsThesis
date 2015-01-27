@@ -1,23 +1,15 @@
-#include <cstdio>
-#include <cstdlib>
-#include <climits>
-#include "pnmfile.h"
-#include "filter.h"
+#include "location.h"
 
-using namespace vlib;
 
-int main(int argc, char **argv) {
-  if (argc != 4) {
-    fprintf(stderr, "usage: %s input(ppm) output(ppm) sigma\n", argv[0]);
-    return 1;
-  }
+namespace features {
 
-  char *input_name = argv[1];
-  char *output_name = argv[2];
-  double sigma = atof(argv[3]);
+int location_features(int row_start, int row_end, float* center) {
+  
+  *center = (row_start + row_end)/2;
 
-  // load input
-  image<rgb> *input = loadPPM(input_name);
+  return 0;
+}
 
-  delete input;
+
+
 }
