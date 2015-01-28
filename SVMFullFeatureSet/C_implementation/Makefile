@@ -4,7 +4,7 @@ OPT      = #-O3
 CXX      = g++
 CXXFLAGS = $(DBG) $(OPT) $(INCDIR)
 LDFLAGS  = $(DBG) $(OPT) -lm 
-OBJS = edge_centers.cpp location.o hsv_histograms.o hsv_conversion.o hsv_means.o#$(wildcard *.cpp)
+OBJS = svm.o edge_centers.o location.o hsv_histograms.o hsv_conversion.o hsv_means.o#$(wildcard *.cpp)
 
 
 all: classify_image

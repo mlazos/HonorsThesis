@@ -1,17 +1,5 @@
-#include <cstdio>
-#include <cstdlib>
-#include <climits>
-#include "pnmfile.h"
-#include "hsv_conversion.h"
-#include "hsv_means.h"
-#include "hsv_histograms.h"
-#include "location.h"
-#include "imconv.h"
-#include "filter.h"
-#include "canny.h"
-#include "edge_centers.h"
-#include "matrix.h"
-#include <math.h>
+#include "classify_image.h"
+
 
 using namespace vlib;
 using namespace hsv;
@@ -59,10 +47,72 @@ int main(int argc, char **argv) {
     }
   }
 
-
+  svm_problem *prob = convert_features(features);
+  svm_parameter *param = new svm_parameter;
   
+  param->svm_type = C_SVC;
+  param->kernel_type = RBF;
+  param->C = 3;
+  param->eps = 0.0001;//0.0001;
+  param->gamma = 1/82;
+  param->degree = 1;
+  param->shrinking = 0;
+  param->probability = 0;
+  param->nr_weight = 0;
+  param->cache_size = 100;
+  
+  const char* err = svm_check_parameter(prob, param);
+  if(err) {
+    printf(err);
+    exit(1);
+  }
+
+
+  svm_model *model = svm_train(prob, param);   
 
   delete input;
   delete smoothed;
   delete gray;
 }
+
+svm_problem *convert_features(matrix<float> *features) {
+  int width = features->cols();
+  int height = features->rows();
+  svm_problem *prob = new svm_problem; 
+  svm_node **nodes = new svm_node*[features->rows()];
+  double *labels = new double[features->rows()];
+
+  for(int row = 0; row < height; row++) {
+    labels[row] = rand() % 2;
+    //count number of non-zero elements for allocation
+    int num_els = 0;
+    for(int col = 0; col < width; col++) {
+      if(matRef(features, row, col) != 0) {
+        num_els++;
+      }
+    }
+    //create sparse representation
+    svm_node *vec = new svm_node[num_els];
+    num_els = 0;
+    for(int col = 0; col < width; col++) {
+      if(matRef(features, row, col) != 0.0) {
+        vec[num_els].value = matRef(features, row, col);
+        vec[num_els].index = col;
+        num_els++;
+      }
+    }
+    
+    nodes[row] = vec;
+  }
+
+  prob->x = nodes;
+  prob->y = labels;
+  prob->l = height;
+
+  return prob;
+}
+
+
+
+
+
