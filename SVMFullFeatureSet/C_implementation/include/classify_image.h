@@ -15,5 +15,8 @@
 #include <math.h>
 #include <dirent.h>
 
+int compute_labels(image<uchar>*, int, int, double*);
+int compute_label(image<uchar>*, int, int, int, int, double*);
 int compute_features(image<rgb>*,int,int,matrix<float>*);
-svm_problem *convert_features(matrix<float>*);
+char** load_filenames(char*,int*);
+svm_problem *convert_features(matrix<float>*,double*);

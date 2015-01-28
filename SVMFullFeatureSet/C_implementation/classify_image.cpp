@@ -17,48 +17,39 @@ int main(int argc, char **argv) {
   double sigma = atof(argv[4]);
   */
   char *input_name = "./sample_images/";
+  char *truth_name = "./ground_truth/";
   int tile_size = 30;
 
 
-  //load all image names from folder
-  int num_files = 0;
-  DIR *dir;
-  struct dirent *ent;
-  char** files = new char*[150];
-  if ((dir = opendir (input_name)) != NULL) {
-    while ((ent = readdir (dir)) != NULL) {
-      char* file = new char[50];
-      file = strcpy(file, input_name);
-      files[num_files] = strcat(file,ent->d_name);
-      num_files++;
-    }
-    closedir (dir);
-  } else {
-    /* could not open directory */
-    perror ("");
-      return EXIT_FAILURE;
-  }
+  int num_files;
+  char** training_files = load_filenames(input_name, &num_files);
+  char** truth_files = load_filenames(truth_name, &num_files); 
 
 
   //calculate total number of features to allocate memory
-  image<rgb> *input = loadPPM(files[2]); 
+  image<rgb> *input = loadPPM(training_files[2]); 
   int height = input->height();
   int width = input->width();
   int num_tiles = (width/tile_size) * (height/tile_size);
   int total_features = num_tiles * (num_files - 2);
   printf("%d", total_features);
   matrix<float>* features = new matrix<float>(total_features, 16, true);
+  double *labels = new double[total_features];
+  
+
 
   //compute features
   int features_computed = 0;
   for(int ind = 2; ind < num_files; ind++) {
-    image<rgb> *input = loadPPM(files[ind]); 
-    features_computed = compute_features(input, tile_size, features_computed, features);
-  	delete input;
+    image<rgb> *input = loadPPM(training_files[ind]);
+    image<uchar> *truth = loadPBM(truth_files[ind]); 
+    compute_features(input, tile_size, features_computed, features);
+  	features_computed = compute_labels(truth, tile_size, features_computed, labels);
+	delete input;
   }
 
   
-  svm_problem *prob = convert_features(features);
+  svm_problem *prob = convert_features(features, labels);
   svm_parameter *param = new svm_parameter;
   
   param->svm_type = C_SVC;
@@ -84,6 +75,68 @@ int main(int argc, char **argv) {
   delete input;
 }
 
+char** load_filenames(char* dir_name, int* num_filenames) {
+  //load all image names from folder
+  int num_files = 0;
+  DIR *dir;
+  struct dirent *ent;
+  char** files = new char*[150];
+  if ((dir = opendir (dir_name)) != NULL) {
+    while ((ent = readdir (dir)) != NULL) {
+      char* file = new char[50];
+      file = strcpy(file, dir_name);
+      files[num_files] = strcat(file,ent->d_name);
+      num_files++;
+    }
+    closedir (dir);
+  } else {
+    /* could not open directory */
+    perror ("");
+  }
+
+  *num_filenames = num_files;
+  return files;
+}
+
+
+int compute_labels(image<uchar> *truth, int tile_size, int init_row, double *labels) {
+  int width = truth->width();
+  int height = truth->height();
+
+  int num_labels = init_row;
+  for(int row = 0; row + tile_size < height; row += tile_size) {
+    for(int col = 0; col + tile_size < width; col += tile_size) {
+      compute_label(truth, col, col + tile_size, row, row + tile_size, &labels[num_labels]);
+	  num_labels++;
+	}
+  }
+
+  return num_labels;
+
+}
+
+
+
+int compute_label(image<uchar> *truth, int col_start, int col_end, int row_start, int row_end, double *label) {
+  int sum = 0;
+  for(int row = row_start; row < row_end; row++) {
+    for(int col = col_start; col < col_end; col++) {
+      sum = sum + imRef(truth, row, col);
+	}
+  }
+  
+  int total = (row_end - row_start) * (col_end - col_start);
+  if((float)(sum/total) > .9) {
+    *label = 1;
+  }
+  else {
+  	*label = 0;
+  }
+  
+  return 0;
+}
+
+
 /*
   compute features
   fills in features starting at init_row
@@ -108,7 +161,7 @@ int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<flo
       sat_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 3, matPtr(features, num_features, 9)); 
       location_features(row, row + tile_size, input->height(), matPtr(features, num_features, 13));
       edge_centers(edgeim, col, col + tile_size, row, row + tile_size, matPtr(features,num_features, 14));          
-	  /*
+      /*
       for(int ind = 0; ind < 16; ind++) {
         printf("%f ", matRef(features, num_features, ind));
       } 
@@ -128,12 +181,11 @@ int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<flo
 
 
 
-svm_problem *convert_features(matrix<float> *features) {
+svm_problem *convert_features(matrix<float> *features, double *labels) {
   int width = features->cols();
   int height = features->rows();
   svm_problem *prob = new svm_problem; 
   svm_node **nodes = new svm_node*[features->rows()];
-  double *labels = new double[features->rows()];
 
   for(int row = 0; row < height; row++) {
 
@@ -155,7 +207,6 @@ svm_problem *convert_features(matrix<float> *features) {
       }
     }
     vec[num_els].index = -1;   
-    labels[row] = rand() % 2;
     nodes[row] = vec;
   }
 
