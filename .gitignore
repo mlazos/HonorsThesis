@@ -1,5 +1,7 @@
 #images from dataset
 *.jpg
+*.ppm
+*.pbm
 #saved workspaces
 *.mat
 
