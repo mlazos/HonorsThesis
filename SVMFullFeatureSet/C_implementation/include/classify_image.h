@@ -13,5 +13,7 @@
 #include "matrix.h"
 #include "svm.h"
 #include <math.h>
+#include <dirent.h>
 
+int compute_features(image<rgb>*,int,int,matrix<float>*);
 svm_problem *convert_features(matrix<float>*);
