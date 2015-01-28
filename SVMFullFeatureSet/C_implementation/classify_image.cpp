@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
   int num_files = 0;
   DIR *dir;
   struct dirent *ent;
-  char** files = new char*[50];
+  char** files = new char*[150];
   if ((dir = opendir (input_name)) != NULL) {
     while ((ent = readdir (dir)) != NULL) {
       char* file = new char[50];
@@ -39,12 +39,14 @@ int main(int argc, char **argv) {
       return EXIT_FAILURE;
   }
 
+
   //calculate total number of features to allocate memory
   image<rgb> *input = loadPPM(files[2]); 
   int height = input->height();
   int width = input->width();
   int num_tiles = (width/tile_size) * (height/tile_size);
   int total_features = num_tiles * (num_files - 2);
+  printf("%d", total_features);
   matrix<float>* features = new matrix<float>(total_features, 16, true);
 
   //compute features
@@ -52,6 +54,7 @@ int main(int argc, char **argv) {
   for(int ind = 2; ind < num_files; ind++) {
     image<rgb> *input = loadPPM(files[ind]); 
     features_computed = compute_features(input, tile_size, features_computed, features);
+  	delete input;
   }
 
   
@@ -76,7 +79,7 @@ int main(int argc, char **argv) {
   }
 
 
-  svm_model *model = svm_train(prob, param);   
+//  svm_model *model = svm_train(prob, param);   
 
   delete input;
 }
@@ -105,17 +108,19 @@ int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<flo
       sat_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 3, matPtr(features, num_features, 9)); 
       location_features(row, row + tile_size, input->height(), matPtr(features, num_features, 13));
       edge_centers(edgeim, col, col + tile_size, row, row + tile_size, matPtr(features,num_features, 14));          
-
+	  /*
       for(int ind = 0; ind < 16; ind++) {
         printf("%f ", matRef(features, num_features, ind));
       } 
       printf("\n");
-
+	  */
       num_features++;
     }
   }
+  delete hsv_im;
   delete smoothed;
-  delete gray;
+  delete gray; 
+  delete edgeim;
 
   return num_features; 
 }
