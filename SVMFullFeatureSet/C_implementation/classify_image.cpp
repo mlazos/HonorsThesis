@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 
   //compute features
   int features_computed = 0;
-  for(int ind = 2; ind < num_files; ind++) {
+  for(int ind = 2; ind < num_files; ind += 2) {
 	  image<rgb> *input = loadPPM(training_files[ind]);
     image<uchar> *truth = loadPBM(truth_files[ind]); 
 	  compute_features(input, tile_size, features_computed, features);
@@ -102,8 +102,7 @@ int compute_labels(image<uchar> *truth, int tile_size, int init_row, double *lab
   int num_labels = init_row;
   for(int row = 0; row + tile_size < height; row += tile_size) {
     for(int col = 0; col + tile_size < width; col += tile_size) {
-	  compute_label(truth, col, col + tile_size, row, row + tile_size, &(labels[num_labels]));
-      
+	  compute_label(truth, col, col + tile_size, row, row + tile_size, &(labels[num_labels]));  
 	  num_labels++;
     }
   }
@@ -157,8 +156,12 @@ int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<flo
       sat_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 3, matPtr(features, num_features, 9)); 
       location_features(row, row + tile_size, input->height(), matPtr(features, num_features, 13));
       edge_centers(edgeim, col, col + tile_size, row, row + tile_size, matPtr(features,num_features, 14));          
-       
-	  
+      /* 
+	    for(int i = 0; i < 3; i++) {
+        printf("%f ", matRef(features, num_features, i));
+      }
+      printf("\n"); */
+                    
       num_features++;
     }
   }
