@@ -37,15 +37,16 @@ int main(int argc, char **argv) {
 
   //compute features
   int features_computed = 0;
-  for(int ind = 2; ind < num_files; ind++) {
-    image<rgb> *input = loadPPM(training_files[ind]);
+  for(int ind = 2; ind < 3; ind++) {
+	image<rgb> *input = loadPPM(training_files[ind]);
     image<uchar> *truth = loadPBM(truth_files[ind]); 
-    compute_features(input, tile_size, features_computed, features);
+
+
+	compute_features(input, tile_size, features_computed, features);
   	features_computed = compute_labels(truth, tile_size, features_computed, labels);
-	  delete input;
+	delete input;
     delete truth;
   }
-
   
   svm_problem *prob = convert_features(features, labels);
   svm_parameter *param = new svm_parameter;
@@ -66,7 +67,6 @@ int main(int argc, char **argv) {
     printf(err);
     exit(1);
   }
-
 
   svm_model *model = svm_train(prob, param);   
 
@@ -104,11 +104,12 @@ int compute_labels(image<uchar> *truth, int tile_size, int init_row, double *lab
   int num_labels = init_row;
   for(int row = 0; row + tile_size < height; row += tile_size) {
     for(int col = 0; col + tile_size < width; col += tile_size) {
-      compute_label(truth, col, col + tile_size, row, row + tile_size, &(labels[num_labels]));
-      num_labels++;;
+	  compute_label(truth, col, col + tile_size, row, row + tile_size, &(labels[num_labels]));
+      
+	  num_labels++;
     }
   }
-
+  
   return num_labels;
 
 }
@@ -120,9 +121,8 @@ int compute_label(image<uchar> *truth, int col_start, int col_end, int row_start
   for(int row = row_start; row < row_end; row++) {
     for(int col = col_start; col < col_end; col++) {
       sum = sum + imRef(truth, col, row);
-	  }
+	}
   }
-  
   int total = (row_end - row_start) * (col_end - col_start);
   if((float)(sum/total) > .9) {
     *label = 1.0;
@@ -130,7 +130,6 @@ int compute_label(image<uchar> *truth, int col_start, int col_end, int row_start
   else {
   	*label = 0.0;
   }
-  
   return 0;
 }
 
@@ -149,6 +148,7 @@ int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<flo
   int width = hsv_im->width();
   int height = hsv_im->height();
 
+  
   int num_features = init_row;
   
   //calculate features over all tiles
@@ -159,12 +159,8 @@ int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<flo
       sat_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 3, matPtr(features, num_features, 9)); 
       location_features(row, row + tile_size, input->height(), matPtr(features, num_features, 13));
       edge_centers(edgeim, col, col + tile_size, row, row + tile_size, matPtr(features,num_features, 14));          
-      /*
-      for(int ind = 0; ind < 16; ind++) {
-        printf("%f ", matRef(features, num_features, ind));
-      } 
-      printf("\n");
-	  */
+       
+	  
       num_features++;
     }
   }
