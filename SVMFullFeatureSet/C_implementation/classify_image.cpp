@@ -38,13 +38,11 @@ int main(int argc, char **argv) {
   //compute features
   int features_computed = 0;
   for(int ind = 2; ind < 3; ind++) {
-	image<rgb> *input = loadPPM(training_files[ind]);
+	  image<rgb> *input = loadPPM(training_files[ind]);
     image<uchar> *truth = loadPBM(truth_files[ind]); 
-
-
-	compute_features(input, tile_size, features_computed, features);
+	  compute_features(input, tile_size, features_computed, features);
   	features_computed = compute_labels(truth, tile_size, features_computed, labels);
-	delete input;
+	  delete input;
     delete truth;
   }
   
@@ -120,8 +118,8 @@ int compute_label(image<uchar> *truth, int col_start, int col_end, int row_start
   int sum = 0;
   for(int row = row_start; row < row_end; row++) {
     for(int col = col_start; col < col_end; col++) {
-      sum = sum + imRef(truth, col, row);
-	}
+      sum = sum + (1 - imRef(truth, col, row));
+	  }
   }
   int total = (row_end - row_start) * (col_end - col_start);
   if((float)(sum/total) > .9) {
