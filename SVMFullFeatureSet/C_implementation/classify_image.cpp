@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 
   //compute features
   int features_computed = 0;
-  for(int ind = 2; ind < 3; ind++) {
+  for(int ind = 2; ind < num_files; ind++) {
 	  image<rgb> *input = loadPPM(training_files[ind]);
     image<uchar> *truth = loadPBM(truth_files[ind]); 
 	  compute_features(input, tile_size, features_computed, features);
