@@ -19,4 +19,5 @@ int compute_labels(image<uchar>*, int, int, double*);
 int compute_label(image<uchar>*, int, int, int, int, double*);
 int compute_features(image<rgb>*,int,int,matrix<float>*);
 char** load_filenames(char*,int*);
+void print_features(matrix<float>*,int,int,int,double*);
 svm_problem *convert_features(matrix<float>*,double*);

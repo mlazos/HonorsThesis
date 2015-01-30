@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
   int height = input->height();
   int width = input->width();
   int num_tiles = (width/tile_size) * (height/tile_size);
-  int total_features = num_tiles * (num_files - 2);
+  int total_features = num_tiles * (num_files - 2)/2;
   matrix<float>* features = new matrix<float>(total_features, 16, true);
   double *labels = new double[total_features];
 
@@ -52,8 +52,8 @@ int main(int argc, char **argv) {
   param->svm_type = C_SVC;
   param->kernel_type = RBF;
   param->C = 3;
-  param->eps = 0.001;//0.0001;
-  param->gamma = 1/82;
+  param->eps = 0.0001;//0.0001;
+  param->gamma = 1;
   param->degree = 1;
   param->shrinking = 0;
   param->probability = 0;
@@ -65,6 +65,22 @@ int main(int argc, char **argv) {
     printf(err);
     exit(1);
   }
+  printf("training on %d features\n", features_computed);
+/*
+  for(int ind = 0; ind < features_computed; ind++) {
+	svm_node* arr = prob->x[ind];
+    int inc = 0;
+    int i = arr[0].index;
+    while(i != -1) {
+      printf("%f ",arr[inc].value );
+      inc++;
+	  i = arr[inc].index;
+    }
+	printf("L: %f", prob->y[ind]);
+    printf("\n");
+  }
+*/
+ 
 
   svm_model *model = svm_train(prob, param);   
 
@@ -174,6 +190,17 @@ int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<flo
 
 }
 
+void print_features(matrix<float> *features, int start_feature, int end_feature, int num_features, double *labels) {
+
+for(int row = 0; row < num_features; row++) {
+  for(int col = start_feature; col < end_feature; col++) {
+    printf("%f ", matRef(features, row, col));
+  } 
+  printf("L:%f", labels[row]);
+  printf("\n");
+}
+
+}
 
 
 
@@ -188,7 +215,7 @@ svm_problem *convert_features(matrix<float> *features, double *labels) {
     //count number of non-zero elements for allocation
     int num_els = 0;
     for(int col = 0; col < width; col++) {
-      if(matRef(features, row, col) != 0.0) {
+      if(matRef(features, row, col) != 0) {
         num_els++;
       }
     }
@@ -196,9 +223,9 @@ svm_problem *convert_features(matrix<float> *features, double *labels) {
     svm_node *vec = new svm_node[num_els + 1];
     num_els = 0;
     for(int col = 0; col < width; col++) {
-      if(matRef(features, row, col) != 0.0) {
+      if(matRef(features, row, col) != 0) {
         vec[num_els].value = matRef(features, row, col);
-        vec[num_els].index = col;
+        vec[num_els].index = col + 1;
         num_els++;
       }
     }
