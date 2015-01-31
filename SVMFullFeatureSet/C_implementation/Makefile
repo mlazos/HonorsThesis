@@ -3,11 +3,12 @@ DBG      = -g
 OPT      = #-O3
 CXX      = g++
 CXXFLAGS = $(DBG) $(OPT) $(INCDIR)
-LDFLAGS  = $(DBG) $(OPT) -lm 
-OBJS = svm.o edge_centers.o location.o hsv_histograms.o hsv_conversion.o hsv_means.o#$(wildcard *.cpp)
+LDFLAGS  = $(DBG) $(OPT) -lm
+OBJS = edge_centers.o feature_extraction.o hsv_means.o hsv_histograms.o hsv_conversion.o location.o svm.o
 
+all: train_svm classify_image
 
-all: classify_image
+train_svm: $(OBJS)
 
 classify_image: $(OBJS)
 
@@ -15,7 +16,7 @@ classify_image: $(OBJS)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	/bin/rm -f classify_image *.o
+	/bin/rm -f classify_image train_svm *.o
 
 clean-all: clean
 	/bin/rm -f *~ *.p?m 

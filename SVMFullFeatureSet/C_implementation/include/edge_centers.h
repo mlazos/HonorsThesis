@@ -1,3 +1,6 @@
+#ifndef EDGE_CENTERS_H
+#define EDGE_CENTERS_H
+
 #include <cstdio>
 #include <cstdlib>
 #include <climits>
@@ -11,3 +14,4 @@ namespace features {
 int edge_centers(image<uchar>*, int, int, int, int, float*);
 
 }
+#endif
