@@ -84,8 +84,36 @@ int main(int argc, char **argv) {
 
   svm_model *model = svm_train(prob, param);   
 
+  matrix<float>* im_features = new matrix<float>(540, 16, true);
+  input = loadPPM(training_files[3]);
+  image<uchar> *truth = loadPBM(truth_files[3]);
+  compute_features(input, tile_size, 0, im_features);
+  double *correct_labels = new double[540];
+  compute_labels(truth, tile_size, 0, correct_labels);
+  double *test_labels = new double[540];
+  svm_problem* single_prob = convert_features(features, labels);
+  
+  for(int ind = 0; ind < 540; ind++) {
+    test_labels[ind] = svm_predict(model, prob->x[ind]);  
+  }
+
+  int sum = 0;
+  for(int ind = 0; ind < 540; ind++) {
+    //printf("%f,%f\n",test_labels[ind], correct_labels[ind]);
+  	sum = sum + ((test_labels[ind] == correct_labels[ind]) ? 1 : 0);
+  }
+
+
+  printf("%f\n", ((float)sum)/((float)540.0));
+  
+
   delete input;
 }
+
+
+
+
+
 
 char** load_filenames(char* dir_name, int* num_filenames) {
   //load all image names from folder
