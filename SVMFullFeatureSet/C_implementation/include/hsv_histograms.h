@@ -1,3 +1,8 @@
+
+
+#ifndef HSV_HIST_H
+#define HSV_HIST_H
+
 #include <cstdio>
 #include <cstdlib>
 #include <climits>
@@ -8,10 +13,10 @@
 
 using namespace vlib;
 
-#ifndef HSV_HIST_H
-#define HSV_HIST_H
 namespace features {
+
 int hue_histogram_features(image<hsv_float>*, int, int, int, int, float, float, int, float*);
 int sat_histogram_features(image<hsv_float>*, int, int, int, int, float, float, int, float*); 
+
 }
 #endif

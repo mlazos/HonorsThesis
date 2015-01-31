@@ -1,11 +1,11 @@
+#ifndef HSV_CONV_H
+#define HSV_CONV_H
 #include <cstdio>
 #include <cstdlib>
 #include <climits>
 #include "image.h"
 #include "misc.h"
 
-#ifndef HSV_CONV_H
-#define HSV_CONV_H
 
 using namespace vlib;
 

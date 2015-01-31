@@ -36,6 +36,7 @@ int hue_histogram_features(image<hsv_float>* image, int col_start, int col_end, 
   }  
 
   hist[num_bins] = hist_entropy(num_bins, hist);
+  return 0;
 }
 
 
