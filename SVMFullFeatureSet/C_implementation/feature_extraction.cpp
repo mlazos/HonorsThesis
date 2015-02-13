@@ -63,17 +63,17 @@ int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<flo
   for(int row = 0; row + tile_size < height; row += tile_size) {
     for(int col = 0; col + tile_size < width; col += tile_size) {
       hsv_means(hsv_im, col, col + tile_size, row, row + tile_size, matPtr(features, num_features, 0));
-      hue_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 5, matPtr(features, num_features, 3)); 
-      sat_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 3, matPtr(features, num_features, 9)); 
-      location_features(row, row + tile_size, input->height(), matPtr(features, num_features, 13));
-                    
+      hue_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 7, matPtr(features, num_features, 3)); 
+      sat_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 7, matPtr(features, num_features, 11)); 
+      gray_histogram_features(smoothed, col, col + tile_size, row, row + tile_size, 0, 255, 7, matPtr(features, num_features, 19));
+      gray_variance(smoothed, col, col + tile_size, row, row + tile_size, matPtr(features, num_features, 27));
+      location_features(row, row + tile_size, input->height(), matPtr(features, num_features, 28));
       num_features++;
     }
   }
   delete hsv_im;
   delete smoothed;
   delete gray; 
-  delete edgeim;
 
   return num_features; 
 

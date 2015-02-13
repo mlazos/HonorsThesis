@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
   */
   char *input_name = "./ppm_images/";
   char *truth_name = "./ground_truth/";
-  int tile_size = 30;
+  int tile_size = TILE_DIM;
 
 
   int num_files;

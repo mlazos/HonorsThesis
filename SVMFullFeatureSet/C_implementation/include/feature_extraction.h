@@ -12,12 +12,15 @@
 #include "imconv.h"
 #include "canny.h"
 #include "edge_centers.h"
+#include "textures.h"
 #include "matrix.h"
 #include "svm.h"
 #include <math.h>
 #include <dirent.h>
 
-#define NUM_FEATURES 14
+
+#define TILE_DIM 45
+#define NUM_FEATURES 29
 
 int compute_labels(image<uchar>*, int, int, double*);
 int compute_label(image<uchar>*, int, int, int, int, double*);
