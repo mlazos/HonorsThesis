@@ -7,30 +7,6 @@ using namespace hsv;
 using namespace features;
 
 
-char** load_filenames(char* dir_name, int* num_filenames) {
-  //load all image names from folder
-  int num_files = 0;
-  DIR *dir;
-  struct dirent *ent;
-  char** files = new char*[150];
-  if ((dir = opendir (dir_name)) != NULL) {
-    while ((ent = readdir (dir)) != NULL) {
-      char* file = new char[50];
-      file = strcpy(file, dir_name);
-      files[num_files] = strcat(file,ent->d_name);
-      num_files++;
-    }
-    closedir (dir);
-  } else {
-    /* could not open directory */
-    perror ("");
-  }
-
-  *num_filenames = num_files;
-  return files;
-}
-
-
 int compute_labels(image<uchar> *truth, int tile_size, int init_row, double *labels) {
   int width = truth->width();
   int height = truth->height();
@@ -76,7 +52,6 @@ int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<flo
   image<hsv_float> *hsv_im = rgb_to_hsv_im(input);
   image<uchar> *gray = imageRGBtoGRAY(input);
   image<float> *smoothed = smooth(gray, 1.0);
-  image<uchar> *edgeim = canny(smoothed, 1.0);
   
   int width = hsv_im->width();
   int height = hsv_im->height();
@@ -91,12 +66,6 @@ int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<flo
       hue_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 5, matPtr(features, num_features, 3)); 
       sat_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 3, matPtr(features, num_features, 9)); 
       location_features(row, row + tile_size, input->height(), matPtr(features, num_features, 13));
-      edge_centers(edgeim, col, col + tile_size, row, row + tile_size, matPtr(features,num_features, 14));          
-      /* 
-	    for(int i = 0; i < 3; i++) {
-        printf("%f ", matRef(features, num_features, i));
-      }
-      printf("\n"); */
                     
       num_features++;
     }
@@ -109,7 +78,7 @@ int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<flo
   return num_features; 
 
 }
-
+/*
 void print_features(matrix<float> *features, int start_feature, int end_feature, int num_features, double *labels) {
 
 for(int row = 0; row < num_features; row++) {
@@ -121,7 +90,7 @@ for(int row = 0; row < num_features; row++) {
 }
 
 }
-
+*/
 
 
 svm_problem *convert_features(matrix<float> *features, double *labels) {
