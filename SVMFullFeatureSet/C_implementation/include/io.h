@@ -1,5 +1,5 @@
-#ifndef FEATURE_EXTRACTION_H
-#define FEATURE_EXTRACTION_H
+#ifndef IO_H
+#define IO_H
 
 #include <cstdio>
 #include <cstdlib>
@@ -17,12 +17,10 @@
 #include <math.h>
 #include <dirent.h>
 
-#define NUM_FEATURES 14
-
-int compute_labels(image<uchar>*, int, int, double*);
-int compute_label(image<uchar>*, int, int, int, int, double*);
-int compute_features(image<rgb>*,int,int,matrix<float>*);
 char** load_filenames(char*,int*);
 void print_features(matrix<float>*,int,int,int,double*);
-svm_problem *convert_features(matrix<float>*,double*);
+void create_highlighted_image(image<rgb>*,int,double*);
+void color_tile(image<rgb>*,int,int,int,int);
+void print_features(matrix<float>*,int,int,int,double*);
+
 #endif

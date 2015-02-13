@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
   int width = input->width();
   int num_tiles = (width/tile_size) * (height/tile_size);
   int total_features = num_tiles * (num_files - 2)/2;
-  matrix<float>* features = new matrix<float>(total_features, 16, true);
+  matrix<float>* features = new matrix<float>(total_features, NUM_FEATURES, true);
   double *labels = new double[total_features];
 
 
@@ -50,11 +50,11 @@ int main(int argc, char **argv) {
   svm_parameter *param = new svm_parameter;
   
   param->svm_type = C_SVC;
-  param->kernel_type = RBF;
+  param->kernel_type = POLY;
   param->C = 3;
   param->eps = 0.0001;//0.0001;
   param->gamma = 1;
-  param->degree = 1;
+  param->degree = 7;
   param->shrinking = 0;
   param->probability = 0;
   param->nr_weight = 0;

@@ -1,5 +1,5 @@
 #include "classify_image.h"
-#include "io.h"
+
 using namespace vlib;
 using namespace hsv;
 using namespace features;
@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
   int width = input->width();
   int num_tiles = (width/tile_size) * (height/tile_size);
   int total_features = num_tiles;
-  matrix<float>* features = new matrix<float>(total_features, NUM_FEATURES, true);
+  matrix<float>* features = new matrix<float>(total_features, 16, true);
   double *labels = new double[total_features];
   double *test_labels = new double[total_features];
 
@@ -69,5 +69,31 @@ int main(int argc, char **argv) {
   
   savePPM(input, "out.ppm");
   delete input;
+}
+
+
+void create_highlighted_image(image<rgb> *input, int tile_size, double *labels) {
+  int width = input->width();
+  int height = input->height();
+  int ind = 0;
+  for(int row = 0; row + tile_size < height; row += tile_size) {
+    for(int col = 0; col + tile_size < width; col += tile_size) {
+	  if(labels[ind] == 1.0) { 
+		color_tile(input, col, col + tile_size, row, row + tile_size);
+      }
+ 	  ind++;
+    }
+  }
+}
+
+void color_tile(image<rgb> *input, int start_col, int end_col, int start_row, int end_row) {
+  for(int row = start_row; row < end_row; row++) {
+    for(int col = start_col; col < end_col; col++) {
+      rgb new_value = imRef(input, col, row);
+      new_value.r = new_value.r/5;
+      new_value.b = new_value.b/5;
+      imRef(input, col, row) = new_value;
+    }
+  }
 }
 
