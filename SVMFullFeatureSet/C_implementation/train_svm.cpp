@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
   */
   char *input_name = "./ppm_images/";
   char *truth_name = "./ground_truth/";
-  int tile_size = 30;
+  int tile_size = TILE_DIM;
 
 
   int num_files;
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
   param->C = 3;
   param->eps = 0.0001;//0.0001;
   param->gamma = 1;
-  param->degree = 7;
+  param->degree = 3;
   param->shrinking = 0;
   param->probability = 0;
   param->nr_weight = 0;
@@ -66,8 +66,8 @@ int main(int argc, char **argv) {
     exit(1);
   }
   printf("training on %d features\n", features_computed);
-/*
-  for(int ind = 0; ind < features_computed; ind++) {
+
+  for(int ind = 0; ind < 10; ind++) {
 	svm_node* arr = prob->x[ind];
     int inc = 0;
     int i = arr[0].index;
@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
 	printf("L: %f", prob->y[ind]);
     printf("\n");
   }
-*/
+
  
 
   svm_model *model = svm_train(prob, param);   
