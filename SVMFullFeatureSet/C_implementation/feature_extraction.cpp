@@ -1,6 +1,6 @@
 #include "feature_extraction.h"
 #include "filter.h"
-
+#include "grad.h"
 
 using namespace vlib;
 using namespace hsv;
@@ -51,8 +51,11 @@ int compute_label(image<uchar> *truth, int col_start, int col_end, int row_start
 int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<float>* features) {
   image<hsv_float> *hsv_im = rgb_to_hsv_im(input);
   image<uchar> *gray = imageRGBtoGRAY(input);
+  image<float> *gray_f = imageUCHARtoFLOAT(gray);
   image<float> *smoothed = smooth(gray, 1.0);
-  
+  image<uchar> *edgeim = canny(smoothed, 1.0);
+  image<float> *dx,*dy,*mag;
+  gradient(gray_f,&dx,&dy,&mag);
   int width = hsv_im->width();
   int height = hsv_im->height();
 
@@ -63,35 +66,23 @@ int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<flo
   for(int row = 0; row + tile_size < height; row += tile_size) {
     for(int col = 0; col + tile_size < width; col += tile_size) {
       hsv_means(hsv_im, col, col + tile_size, row, row + tile_size, matPtr(features, num_features, 0));
-      hue_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 7, matPtr(features, num_features, 3)); 
-      sat_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, 7, matPtr(features, num_features, 11)); 
-      gray_histogram_features(smoothed, col, col + tile_size, row, row + tile_size, 0, 255, 7, matPtr(features, num_features, 19));
-      gray_variance(smoothed, col, col + tile_size, row, row + tile_size, matPtr(features, num_features, 27));
-      location_features(row, row + tile_size, input->height(), matPtr(features, num_features, 28));
+      hue_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, NUM_H_BINS, matPtr(features, num_features, NUM_MEANS)); 
+      sat_histogram_features(hsv_im, col, col + tile_size, row, row + tile_size, 0, 1, NUM_S_BINS, matPtr(features, num_features, NUM_MEANS + NUM_H_BINS + 1)); 
+      gray_variance(gray_f, col, col + tile_size, row, row + tile_size, matPtr(features, num_features, NUM_MEANS + NUM_H_BINS + NUM_S_BINS + 2));
+      edginess(edgeim, col, col + tile_size, row, row + tile_size, matPtr(features, num_features, NUM_MEANS + NUM_H_BINS + NUM_S_BINS + NUM_VAR + 2));
+      location_features(row, row + tile_size, input->height(), matPtr(features, num_features,  NUM_MEANS + NUM_H_BINS + NUM_S_BINS + NUM_VAR + NUM_EDGE + 2));
+      gradient_histogram(mag,dx,dy, col, col + tile_size, row, row + tile_size, NUM_G_BINS, matPtr(features, num_features,  NUM_MEANS + NUM_H_BINS + NUM_S_BINS + NUM_VAR + NUM_EDGE +  NUM_LOC + 2));
       num_features++;
     }
   }
   delete hsv_im;
-  delete smoothed;
+  delete gray_f;
   delete gray; 
-
+  delete edgeim;
+  delete smoothed;
   return num_features; 
 
 }
-/*
-void print_features(matrix<float> *features, int start_feature, int end_feature, int num_features, double *labels) {
-
-for(int row = 0; row < num_features; row++) {
-  for(int col = start_feature; col < end_feature; col++) {
-    printf("%f ", matRef(features, row, col));
-  } 
-  printf("L:%f", labels[row]);
-  printf("\n");
-}
-
-}
-*/
-
 
 svm_problem *convert_features(matrix<float> *features, double *labels) {
   int width = features->cols();
