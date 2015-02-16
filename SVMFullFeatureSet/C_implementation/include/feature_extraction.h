@@ -17,10 +17,19 @@
 #include "svm.h"
 #include <math.h>
 #include <dirent.h>
+#include "edginess.h"
 
-
-#define TILE_DIM 45
-#define NUM_FEATURES 29
+#define NUM_MEANS  3
+#define NUM_H_BINS  5
+#define NUM_S_BINS  5
+#define NUM_G_BINS  8
+#define NUM_VAR  1
+#define NUM_LOC  1
+#define NUM_EDGE  1
+ 
+#define TILE_DIM 30
+//add 3 for each of the histogram entropy features
+#define NUM_FEATURES (NUM_MEANS + NUM_H_BINS + NUM_S_BINS + NUM_G_BINS + NUM_VAR + NUM_LOC + NUM_EDGE + 3)
 
 int compute_labels(image<uchar>*, int, int, double*);
 int compute_label(image<uchar>*, int, int, int, int, double*);

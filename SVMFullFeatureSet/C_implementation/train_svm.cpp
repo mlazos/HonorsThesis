@@ -52,9 +52,9 @@ int main(int argc, char **argv) {
   param->svm_type = C_SVC;
   param->kernel_type = POLY;
   param->C = 3;
-  param->eps = 0.0001;//0.0001;
+  param->eps = 0.001;//0.0001;
   param->gamma = 1;
-  param->degree = 3;
+  param->degree = 5;
   param->shrinking = 0;
   param->probability = 0;
   param->nr_weight = 0;
