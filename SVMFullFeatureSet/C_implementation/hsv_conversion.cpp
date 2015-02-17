@@ -7,18 +7,22 @@ using namespace vlib;
 
 
 namespace hsv {
-    image<hsv_float> *rgb_to_hsv_im(image<rgb> *input_im) { 
+    image<hsv_float> *rgb_to_hsv_im(image<rgb> *input_im, image<float> **h_im) { 
 
     int width = input_im->width();
     int height = input_im->height();
 
     image<hsv_float> *hsv_im = new image<hsv_float>(width, height);
+    image<float> *hue = new image<float>(width, height);
+
     for(int row = 0; row < height; row++) {
       for(int col = 0; col < width; col++) {
         imRef(hsv_im, col, row) = rgb_to_hsv(imRef(input_im, col, row));
+        imRef(hue, col, row) = imRef(hsv_im, col, row).h;
       }  
     }
 
+    *h_im = hue;
     return hsv_im;
     
     }
