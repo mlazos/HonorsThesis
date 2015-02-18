@@ -83,6 +83,7 @@ int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<flo
     }
   }
   delete hsv_im;
+  delete hue_im;
   delete gray_f;
   delete gray; 
   delete edgeim;

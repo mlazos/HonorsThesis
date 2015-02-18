@@ -11,7 +11,7 @@ using namespace vlib;
 
 namespace hsv {
 
-image<hsv_float> *rgb_to_hsv_im(image<rgb>*);
+image<hsv_float> *rgb_to_hsv_im(image<rgb>*,image<float>**);
 hsv_float rgb_to_hsv(const rgb);
 
 }
