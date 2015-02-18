@@ -78,7 +78,7 @@ int compute_features(image<rgb> *input, int tile_size, int init_row,  matrix<flo
       edginess(edgeim, lower_col, upper_col, lower_row, upper_row, matPtr(features, num_features, NUM_MEANS + NUM_H_BINS + NUM_S_BINS + NUM_VAR + 2));
       location_features(lower_row, upper_row, input->height(), matPtr(features, num_features,  NUM_MEANS + NUM_H_BINS + NUM_S_BINS + NUM_VAR + NUM_EDGE + 2));
       gradient_histogram(mag, dx, dy, lower_col, upper_col, lower_row, upper_row, NUM_G_BINS, matPtr(features, num_features,  NUM_MEANS + NUM_H_BINS + NUM_S_BINS + NUM_VAR + NUM_EDGE +  NUM_LOC + 2));
-      gradient_histogram(hue, dhx, dhy, lower_col, upper_col, lower_row, upper_row, NUM_G_BINS, matPtr(features, num_features, NUM_MEANS + NUM_H_BINS + NUM_S_BINS + NUM_VAR + NUM_EDGE + NUM_LOC + 2 + NUM_G_BINS));
+      //gradient_histogram(hue, dhx, dhy, lower_col, upper_col, lower_row, upper_row, NUM_G_BINS, matPtr(features, num_features, NUM_MEANS + NUM_H_BINS + NUM_S_BINS + NUM_VAR + NUM_EDGE + NUM_LOC + 2 + NUM_G_BINS));
       num_features++;
     }
   }

@@ -29,7 +29,7 @@
  
 #define TILE_DIM 30
 //add 3 for each of the histogram entropy features
-#define NUM_FEATURES (NUM_MEANS + NUM_H_BINS + NUM_S_BINS + 2*NUM_G_BINS + NUM_VAR + NUM_LOC + NUM_EDGE + 3)
+#define NUM_FEATURES (NUM_MEANS + NUM_H_BINS + NUM_S_BINS + NUM_G_BINS + NUM_VAR + NUM_LOC + NUM_EDGE + 3)
 
 int compute_labels(image<uchar>*, int, int, double*);
 int compute_label(image<uchar>*, int, int, int, int, double*);
