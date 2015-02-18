@@ -1,5 +1,5 @@
-for i = 1:length(image_data)
-    [~,name,~] = fileparts(image_data(i).name);
-    imwrite(image_data(i).image, ['./ppm/',name, '.ppm']);
+for i = 120:length(new_image_data)
+    [~,name,~] = fileparts(new_image_data(i).name);
+    imwrite(new_image_data(i).ground_truth, ['./pbm/',name, '.pbm']);
     
 end
