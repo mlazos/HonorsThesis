@@ -19,7 +19,7 @@ classify_image: $(OBJS)
 
 clean:
 	/bin/rm -f classify_image train_svm classify_dataset *.o
-
+	/bin/rm -rf *.dSYM
 clean-all: clean
 	/bin/rm -f *~ *.p?m 
 
