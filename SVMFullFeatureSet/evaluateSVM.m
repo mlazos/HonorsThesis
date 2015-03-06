@@ -15,16 +15,16 @@ classifiers.vert_classifier = vert_classifier;
 
 
 tileSize = 30;
-sens = zeros(1,length(LSVMrbf));
-fpr = zeros(1,length(LSVMrbf));
-acc = zeros(1,length(LSVMrbf));
+sens = zeros(size(BETA,1), 1);
+fpr = zeros(size(BETA,1), 1);
+acc = zeros(size(BETA,1), 1);
 j = 1;
 
 
 
 
 
-for SVM = LSVMrbf
+for b = 1:size(BETA,1)
 
 start = cputime;
 true_pos = zeros(1,length(test_inds));
@@ -32,16 +32,16 @@ total_pos = zeros(1,length(test_inds));
 false_pos = zeros(1,length(test_inds));
 total_neg = zeros(1,length(test_inds));
 
+B = BETA(b,:);
+SVM = LSVMrbf(b);
 parfor i = 1:length(test_inds)
-    [~, true_pos(i), total_pos(i), false_pos(i), total_neg(i)] = classifySingleImage(image_data(test_inds(i)), SVM, BETA);
+    [~, true_pos(i), total_pos(i), false_pos(i), total_neg(i)] = classifySingleImage(image_data(test_inds(i)), SVM, B);
 end
 
 
-sens(j) = sum(true_pos)/sum(total_pos);
-fpr(j) = sum(false_pos)/sum(total_neg);
-acc(j) = (sum(true_pos) + (sum(total_neg) - sum(false_pos)))/(sum(total_pos) + sum(total_neg));
-
-j = j + 1;
+sens(b) = sum(true_pos)/sum(total_pos);
+fpr(b) = sum(false_pos)/sum(total_neg);
+acc(b) = (sum(true_pos) + (sum(total_neg) - sum(false_pos)))/(sum(total_pos) + sum(total_neg));
 end
 
 clearvars -except FEATURES NOLOCS LABELS BETA LSVMrbf classifiers training_inds test_inds image_data numFeatureVecs sens fpr acc segment_density
