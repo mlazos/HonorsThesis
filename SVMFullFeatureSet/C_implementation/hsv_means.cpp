@@ -23,7 +23,7 @@ int hsv_means(image<hsv_float>* image, int col_start, int col_end, int row_start
   }
 
 
-  avg.h = avg.h/total;
+   avg.h = avg.h/total;
   avg.s = avg.s/total;
   avg.v = avg.v/total;
 
