@@ -1,9 +1,11 @@
 #include "train_svm.h"
 #include "io.h"
+#include "regularize.h"
 
 using namespace vlib;
 using namespace hsv;
 using namespace features;
+using namespace regularization;
 
 int main(int argc, char **argv) {
   /*if (argc != 5) {
@@ -53,6 +55,11 @@ int main(int argc, char **argv) {
     for(int ind = 0; ind < num_tiles; ind++) {
       test_labels[ind] = svm_predict(model, prob->x[ind]);  
     }
+
+	regularize(test_labels,height/tile_size,width/tile_size);
+    
+
+
     for(int ind = 0; ind < num_tiles; ind++) {
   	  acc_num = acc_num + ((test_labels[ind] == labels[ind]) ? 1 : 0);
       acc_denom++;
