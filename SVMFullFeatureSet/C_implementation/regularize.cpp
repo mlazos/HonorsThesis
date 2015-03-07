@@ -88,7 +88,7 @@ int find_optimal_row(double* scores, int rows, int cols, int col) {
     }
   }
   
-
+  return 0;
 }
 
 }
