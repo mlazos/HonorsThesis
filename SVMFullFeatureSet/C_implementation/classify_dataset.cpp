@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
     compute_labels(truth, tile_size, 0, labels);
     svm_problem *prob = convert_features(features, labels);
     for(int ind = 0; ind < num_tiles; ind++) {
-      test_labels[ind] = svm_predict(model, prob->x[ind]);  
+      test_labels[ind] = svm_predict_s(model, prob->x[ind]);  
     }
 
 	regularize(test_labels,height/tile_size,width/tile_size);

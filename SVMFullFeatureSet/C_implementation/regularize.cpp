@@ -14,7 +14,7 @@ void regularize(double* labels, int rows, int cols) {
    
 
   for(int col = 0; col < cols; col++) {
-    int row = find_optimal_row_disc(labels, rows,cols, col);
+    int row = find_optimal_row(labels, rows,cols, col);
     regularize_col(labels, row, rows, cols, col); 
   }
   
@@ -66,9 +66,9 @@ int find_optimal_row(double* scores, int rows, int cols, int col) {
   double  ascend_sum = 0;
   double descend_sum = 0;
   for(int row = 0; row < rows; row++) {
-    descend_sum += -1*scores[col + row * cols];
+    descend_sum += scores[col + row * cols];
     not_ground_scores[row] = descend_sum;
-    ascend_sum += scores[col + (rows - row - 1) * cols];
+    ascend_sum += -1*scores[col + (rows - row - 1) * cols];
     ground_scores[rows - row - 1] = ascend_sum;
   }
 
@@ -88,7 +88,7 @@ int find_optimal_row(double* scores, int rows, int cols, int col) {
     }
   }
   
-  return 0;
+  return arg_max;
 }
 
 }

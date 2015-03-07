@@ -2589,6 +2589,23 @@ double svm_predict(const svm_model *model, const svm_node *x)
 	return pred_result;
 }
 
+double svm_predict_s(const svm_model *model, const svm_node *x)
+{
+	int nr_class = model->nr_class;
+	double *dec_values;
+	if(model->param.svm_type == ONE_CLASS ||
+	   model->param.svm_type == EPSILON_SVR ||
+	   model->param.svm_type == NU_SVR)
+		dec_values = Malloc(double, 1);
+	else 
+		dec_values = Malloc(double, nr_class*(nr_class-1)/2);
+	svm_predict_values(model, x, dec_values);
+	double pred_result = *dec_values;
+    free(dec_values);
+	return pred_result;
+}
+
+
 double svm_predict_probability(
 	const svm_model *model, const svm_node *x, double *prob_estimates)
 {
