@@ -1,0 +1,12 @@
+%Generate transition probability matrix for markov model
+
+%
+NUM_STATES = 20;
+NUM_NODES = 27;
+G = fspecial('Gaussian', [2*NUM_STATES - 1,1],1);
+
+transition = zeros(NUM_STATES,NUM_STATES);
+
+for i = 1:19
+    transition(:,i) = G(i:(i+19);
+end

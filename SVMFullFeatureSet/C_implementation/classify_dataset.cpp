@@ -56,6 +56,7 @@ int main(int argc, char **argv) {
       test_labels[ind] = svm_predict_s(model, prob->x[ind]);  
     }
 
+
 	regularize(test_labels,height/tile_size,width/tile_size);
     
 

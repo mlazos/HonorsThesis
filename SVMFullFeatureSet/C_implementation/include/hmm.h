@@ -1,13 +1,17 @@
 #include <cstdio>
 #include <cstdlib>
 
-#ifndef REG_H
-#define REF_H
+#ifndef HMM_H
+#define HMM_H
+
+
+
 
 namespace regularization {
 
 void regularize(double*,int,int);
 
 }
+
 
 #endif
