@@ -23,15 +23,8 @@ int main(int argc, char **argv) {
   double sigma = atof(argv[4]);
   */
 
-  matrix<float> *p = read_transition_matrix(); 
 
 
-  for( int i = 0; i < 20; i++) {
-    for( int j = 0; j < 20; j++) {
-      printf("%5.5f,",matRef(p,i,j));
-    }
-    printf("\n");
-  }
 
 
   char *input_name = "./ppm_images/";
@@ -60,10 +53,13 @@ int main(int argc, char **argv) {
   int sens_denom = 0;
   int fpr_num = 0;
   int fpr_denom = 0;
+
+
  
   svm_model *model = svm_load_model("svm.model"); 
   for(int ind = 3; ind < num_files; ind += 2) {
-	image<rgb> *input = loadPPM(training_files[ind]);
+	
+    image<rgb> *input = loadPPM(training_files[ind]);
     image<uchar> *truth = loadPBM(truth_files[ind]); 
 	compute_features(input, tile_size, 0, features);
     compute_labels(truth, tile_size, 0, labels);
@@ -71,7 +67,6 @@ int main(int argc, char **argv) {
     for(int ind = 0; ind < num_tiles; ind++) {
       test_labels[ind] = svm_predict_s(model, prob->x[ind]);  
     }
-
 
 	regularize(test_labels,height/tile_size,width/tile_size);
     

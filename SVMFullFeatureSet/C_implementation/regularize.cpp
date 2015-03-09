@@ -1,7 +1,9 @@
 #include "regularize.h"
 #include <limits>
+#include "hmm.h"
 
 using namespace std;
+using namespace models;
 
 namespace regularization {
 
@@ -12,11 +14,17 @@ int find_optimal_row_disc(double*,int,int,int);
 
 void regularize(double* labels, int rows, int cols) {
    
-
   for(int col = 0; col < cols; col++) {
     int row = find_optimal_row(labels, rows,cols, col);
     regularize_col(labels, row, rows, cols, col); 
   }
+
+
+  int *states = most_likely_boundary(labels, rows, cols);
+ 
+  for(int col = 0; col < cols; col++) {
+     regularize_col(labels, states[col], rows, cols, col);
+  }  
   
 }
 

@@ -4,6 +4,10 @@
 *.pbm
 #saved workspaces
 *.mat
+#editing files
+.swp
+.m~
+
 
 #Compiled source #
 ###################

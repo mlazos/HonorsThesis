@@ -10,7 +10,9 @@ using namespace vlib;
 
 namespace models {
 
-matrix<float> *read_transition_matrix();
+
+int *most_likely_boundary(double*,int,int);
+//matrix<float> *read_transition_matrix();
 
 }
 
