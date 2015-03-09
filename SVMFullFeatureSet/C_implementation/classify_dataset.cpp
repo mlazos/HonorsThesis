@@ -1,11 +1,15 @@
 #include "train_svm.h"
 #include "io.h"
 #include "regularize.h"
+#include "hmm.h"
+
 
 using namespace vlib;
 using namespace hsv;
 using namespace features;
 using namespace regularization;
+using namespace models;
+
 
 int main(int argc, char **argv) {
   /*if (argc != 5) {
@@ -18,6 +22,18 @@ int main(int argc, char **argv) {
   int tile_size = atoi(argv[3]);
   double sigma = atof(argv[4]);
   */
+
+  matrix<float> *p = read_transition_matrix(); 
+
+
+  for( int i = 0; i < 20; i++) {
+    for( int j = 0; j < 20; j++) {
+      printf("%5.5f,",matRef(p,i,j));
+    }
+    printf("\n");
+  }
+
+
   char *input_name = "./ppm_images/";
   char *truth_name = "./ground_truth/";
   int tile_size = TILE_DIM;
