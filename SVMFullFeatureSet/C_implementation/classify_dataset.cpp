@@ -2,7 +2,7 @@
 #include "io.h"
 #include "regularize.h"
 #include "hmm.h"
-
+#include "error_estimation.h"
 
 using namespace vlib;
 using namespace hsv;
@@ -27,9 +27,15 @@ int main(int argc, char **argv) {
 
 
 
-  char *input_name = "./ppm_images/";
-  char *truth_name = "./ground_truth/";
+  char *input_name = "./test_data/";
+  char *truth_name = "./test_truth/";
   int tile_size = TILE_DIM;
+
+  int num_v_files;
+  char *validation_dir = "./validation_data/";
+  char *val_truth_dir = "./validation_truth/";
+  char **v_files = load_filenames(validation_dir, &num_v_files);
+  char **v_truth = load_filenames(val_truth_dir, &num_v_files);
 
 
   int num_files;
@@ -45,6 +51,7 @@ int main(int argc, char **argv) {
   double *labels = new double[num_tiles];
   double *test_labels = new double[num_tiles];    
   
+
   //compute features
 
   int acc_num = 0;
@@ -55,9 +62,30 @@ int main(int argc, char **argv) {
   int fpr_denom = 0;
 
 
- 
   svm_model *model = svm_load_model("svm.model"); 
-  for(int ind = 3; ind < num_files; ind += 2) {
+ 
+
+  //train validation histogram on validation data 
+  for(int ind = 2; ind < num_v_files; ind += 1) {
+	
+    image<rgb> *input = loadPPM(v_files[ind]);
+    image<uchar> *truth = loadPBM(v_truth[ind]); 
+	compute_features(input, tile_size, 0, features);
+    compute_labels(truth, tile_size, 0, labels);
+    svm_problem *prob = convert_features(features, labels);
+    for(int ind = 0; ind < num_tiles; ind++) {
+      test_labels[ind] = svm_predict_s(model, prob->x[ind]);  
+    }
+	
+	update_score_hist(num_tiles, test_labels, labels);
+
+  }
+
+
+
+  print_histogram();
+ 
+  for(int ind = 2; ind < num_files; ind += 1) {
 	
     image<rgb> *input = loadPPM(training_files[ind]);
     image<uchar> *truth = loadPBM(truth_files[ind]); 
@@ -68,8 +96,7 @@ int main(int argc, char **argv) {
       test_labels[ind] = svm_predict_s(model, prob->x[ind]);  
     }
 
-	regularize(test_labels,height/tile_size,width/tile_size);
-    
+	regularize(test_labels,height/tile_size,width/tile_size);    
 
 
     for(int ind = 0; ind < num_tiles; ind++) {
@@ -99,5 +126,11 @@ int main(int argc, char **argv) {
   
 
 }
+
+
+
+
+
+
 
 

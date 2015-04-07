@@ -5,8 +5,8 @@
 #saved workspaces
 *.mat
 #editing files
-.swp
-.m~
+*.swp
+*.m~
 
 
 #Compiled source #

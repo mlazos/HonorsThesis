@@ -29,26 +29,7 @@ for row = 1:rowIters
         xlow = (col-1)*tileSize + 1;
         xhigh = col*tileSize;
         segimage(ylow:yhigh, xlow:xhigh) = numIters;
-        adjmat = filladjmat(row,col,rowIters,colIters,adjmat);
-        
-%         adj_row = rowColToInd(row, col, colIters);
-% 
-%         adj_col = rowColToInd(row, col - 1, colIters);
-%         adjmat(adj_row, adj_col) = 1;
-%         adjmat(adj_col, adj_row) = 1;
-% 
-%         adj_col = rowColToInd(row, col + 1, colIters);
-%         adjmat(adj_row, adj_col) = 1;
-%         adjmat(adj_col, adj_row) = 1;
-% 
-%         adj_col = rowColToInd(row - 1, col, colIters);
-%         adjmat(adj_row, adj_col) = 1;
-%         adjmat(adj_col, adj_row) = 1;
-% 
-%         adj_col = rowColToInd(row + 1, col, colIters);
-%         adjmat(adj_row, adj_col) = 1;
-%         adjmat(adj_col, adj_row) = 1;
-        
+        adjmat = filladjmat(row,col,rowIters,colIters,adjmat);        
         numIters = numIters + 1;
     end
 end

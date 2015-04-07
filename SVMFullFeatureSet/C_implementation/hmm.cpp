@@ -156,7 +156,7 @@ float x_cond_x(int x, int x_prev) {
 }
 
 float y_cond_x(int y, int x) {
-	return gaussian_pdf(x, y, 4.50);
+	return gaussian_pdf(x, y, 4.15);
 }
 
 float gaussian_pdf(float x, float mean, float sigma) {
