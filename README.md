@@ -1,4 +1,4 @@
-# Project Title
+# Honors Thesis - Automatic Pixel Classification for Indoor Navigation
 
 This is an implementation of a custom model for classifying navigable terrain for a small robot. The model consists of an SVM paired with an HMM for smoothing.
 
