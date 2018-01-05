@@ -27,7 +27,7 @@ This is an implementation of a custom model for classifying navigable terrain fo
 9. Run ./classify_dataset, it will print some statistics on the performance of the classifier.
 
 #### Classifying a single image
-1. Run ./classify_image <input ppm> <ground truth pbm> <output ppm name> <tile size> <sigma>,  tile size is the size of the tiles that features are computed from in the image, sigma can be any value.
+1. Run ./classify_image (input ppm) (ground truth pbm) (output ppm name) (tile size) (sigma),  tile size is the size of the tiles that features are computed from in the image, sigma can be any value.
 
 ### Prerequisites
 
